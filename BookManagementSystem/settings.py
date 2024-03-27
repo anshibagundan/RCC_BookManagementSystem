@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'BookManagementSystem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,6 +69,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'BookManagementSystem.wsgi.application'
 
 
@@ -77,13 +79,14 @@ WSGI_APPLICATION = 'BookManagementSystem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'eemon',
-        'USER': 'eemon_user',
-        'PASSWORD': 'xBcSex0Q4EVEJZf6FAeBtjHJlLdy7xbu',
-        'HOST': 'dpg-cn3h3cv109ks73epvbhg-a.oregon-postgres.render.com',
-        'PORT': '5432',
+        'NAME': 'd15p5hf6ractmh',  # データベース名
+        'USER': 'u3acfqt2p7c9o8',  # ユーザー名
+        'PASSWORD': 'p8cf6c6ad388f336a79b9619cecbfda10c56bca9e61b5e7a5de199a9050eb30da',  # パスワード
+        'HOST': 'cb4l59cdg4fg1k.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com',  # ホスト
+        'PORT': '5432',  # ポート
     }
 }
+
 
 
 # Password validation
