@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.urls import path,include
+from . import views
 
 urlpatterns = [
-    # ここにアプリケーションのURLパターンを定義します。
-    # 例: path('example/', views.example_view, name='example'),
+    path('', views.title_page, name='title_page'),
+    path('books/', views.book_list, name='book_list'),
+    path('books/update/<int:book_id>/', views.update_book, name='update_book'),
 ]
