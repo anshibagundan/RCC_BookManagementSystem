@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-w1uno(p83_95-!3aekht%p%zw#pm*d@7-wkkuo4i)x18p2&_xx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1',]
+ALLOWED_HOSTS = ['127.0.0.1',
+                 'RCC_BookManagementSystem.onrender.com',]
 
 
 # Application definition
