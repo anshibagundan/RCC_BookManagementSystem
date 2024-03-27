@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>蔵書管理システム</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #005f73;
+        }
+        .borrow-return-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>蔵書一覧</h1>
+    <button onclick="fetchBooks()" class="btn">蔵書データを取得</button>
+    <button onclick="showBorrowReturnModal()" class="btn borrow-return-btn">貸出/返却</button>
+    <div id="borrowReturnModal" style="display:none; position:fixed; z-index:1; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4);">
+        <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%;">
+            <span onclick="closeModal()" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h2>蔵書一覧</h2>
+            <input type="text" id="searchTitle" placeholder="タイトルで検索" onkeyup="filterBooks()" />
+            <table id="modal-books-table">
+
+            </table>
+        </div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>タイトル</th>
+                <th>貸出者</th>
+                <th>貸出状態</th>
+            </tr>
+        </thead>
+        <tbody id="books"></tbody>
+    </table>
+
+    <!-- Loading ポップアップ -->
+<div id="loadingPopup" style="display:none; position:fixed; z-index:2; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5);">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 5px;">
+        Now Loading...
+    </div>
+</div>
+
+
+    <script>
+        function fetchBooks() {
+            fetch('/books/')
+            .then(response => response.json())
+            .then(data => {
+                const booksTable = document.getElementById('books');
+                booksTable.innerHTML = '';
+                data.forEach(book => {
+                    const borrowStatus = book.isborrow ? '貸出中' : '利用可能';
+                    const borrower = book.isborrow ? book.user : 'なし'; // 貸出中なら貸出者を表示
+                    const row = `
+                        <tr>
+                            <td>${book.title}</td>
+                            <td>${borrower}</td> <!-- 貸出者の情報を表示 -->
+                            <td>${borrowStatus}</td> <!-- 貸出状態を表示 -->
+                        </tr>
+                    `;
+                    booksTable.innerHTML += row;
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        function showBorrowReturnModal() {
+            document.getElementById('borrowReturnModal').style.display = 'block';
+            fetchBooksForModal();
+        }
+        function closeModal() {
+            document.getElementById('borrowReturnModal').style.display = 'none';
+        }
+        function toggleBorrowReturn(bookId, isBorrow) {
+            document.getElementById('loadingPopup').style.display = 'block';
+            let user = isBorrow ? prompt("貸出者の名前を入力してください:") : '';
+
+            if (isBorrow && (user === null || user.trim() === '')) {
+                alert('貸出者の名前が入力されていません。');
+                return;
+            }
+            fetch(`/books/update/${bookId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({isborrow: isBorrow, user: user.trim()}), // user.trim() を使って空白を削除
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                fetchBooksForModal();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('操作に失敗しました。');
+            })
+            .finally(() => {
+                // すべてのポップアップを閉じる
+                fetchBooks();
+                document.getElementById('loadingPopup').style.display = 'none';
+                closeModal(); // 貸出/返却モーダルを閉じる関数
+            });
+        }
+
+        function fetchBooksForModal() {
+            fetch('/books/')
+            .then(response => response.json())
+            .then(data => {
+                const booksTable = document.getElementById('modal-books-table');
+                booksTable.innerHTML = '<thead><tr><th>タイトル</th><th>操作</th></tr></thead>';
+                const tbody = document.createElement('tbody');
+                data.forEach(book => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${book.title}</td>`;
+                    const actionCell = document.createElement('td');
+                    const actionButton = document.createElement('button');
+                    actionButton.className = 'btn';
+                    actionButton.innerText = book.isborrow ? '返却' : '貸出';
+                    actionButton.onclick = function() { toggleBorrowReturn(book.id, !book.isborrow); };
+                    actionCell.appendChild(actionButton);
+                    row.appendChild(actionCell);
+                    tbody.appendChild(row);
+                });
+                booksTable.appendChild(tbody);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        function filterBooks() {
+            const searchQuery = document.getElementById('searchTitle').value.toLowerCase();
+            const books = document.getElementById('modal-books-table').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+            for (let i = 0; i < books.length; i++) {
+                const title = books[i].getElementsByTagName('td')[0].textContent;
+                if (title.toLowerCase().indexOf(searchQuery) > -1) {
+                    books[i].style.display = "";
+                } else {
+                    books[i].style.display = "none";
+                }
+            }
+        }
+
+
+
+    </script>
+</body>
+</html>
