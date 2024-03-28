@@ -15,3 +15,5 @@ class RestrictIPAddressMiddleware:
 
         response = self.get_response(request)
         return response
+
+#無理かも
