@@ -111,7 +111,7 @@
             let user = isBorrow ? prompt("貸出者の名前を入力してください:") : '';
 
             if (isBorrow && (user === null || user.trim() === '')) {
-                alert('貸出者の名前が入力されていません。');
+                alert('貸出者の名前が入力されていません。');document.getElementById('loadingPopup').style.display = 'none';
                 return;
             }
             fetch(`/books/update/${bookId}/`, {
