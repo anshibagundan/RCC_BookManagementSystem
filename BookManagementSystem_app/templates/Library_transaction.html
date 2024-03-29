@@ -32,12 +32,12 @@
                 <label for="bookname">本の名前:</label>
                 <input type="text" id="searchTitle" placeholder="タイトルで検索" onkeyup="filterBooks()" /><br>
                 <label for="genre">ジャンル:</label>
-                <select id="genre" name="genre">
-                    <option value="fiction">Java</option>
-                    <option value="nonfiction">Python</option>
-                    <option value="fantasy">HTML/CSS</option>
-                    <option value="mystery">Unity</option>
-                    <!-- 他のジャンルのオプションを追加することができます -->
+                <select id="genre" onclick="filterBooks()">
+                    <option value="All">All</option>
+                    <option value="Python">Python</option>
+                    <option value="Java">Java</option>
+                    <option value="HTML/CSS">HTML/CSS</option>
+                    <option value="Unity">Unity</option>
                 </select>
             </div>
             <div></div>

@@ -19,10 +19,11 @@ window.onload = function fetchBooksForModal() {
                 // タイトル、ジャンル、利用者、貸出状況を挿入
                 row.innerHTML += `
                     <td>${book.title}</td>
-                    <td>${book.genre}</td>
+                    <td>${book.genre_id === 1 ? 'Python' : (book.genre_id === 2 ? 'Java' : book.genre_id)}</td>
                     <td>${book.user}</td>
                     <td>${book.isborrow ? '貸出中' : '利用可能'}</td>
                 `;
+
                 tbody.appendChild(row);
             });
             booksTable.appendChild(tbody);
@@ -67,14 +68,19 @@ function applyFunctionToAllInputs() {
 
 function filterBooks() {
     const searchQuery = document.getElementById('searchTitle').value.toLowerCase();
+    const selectedGenre = document.getElementById('genre').value;
     const books = document.getElementById('modal-books-table').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 
     for (let i = 0; i < books.length; i++) {
         const title = books[i].getElementsByTagName('td')[1].textContent;
-        if (title.toLowerCase().indexOf(searchQuery) > -1) {
+        const genre = books[i].getElementsByTagName('td')[2].textContent;
+
+        // タイトルとジャンルの両方が検索クエリと一致する場合のみ表示
+        if (title.toLowerCase().indexOf(searchQuery) > -1 && (selectedGenre === 'All' || genre === selectedGenre)) {
             books[i].style.display = "";
         } else {
             books[i].style.display = "none";
         }
     }
 }
+

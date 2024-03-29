@@ -9,6 +9,7 @@
     margin: 1%;
     display: grid;
     grid-template-columns: 20% 1fr 20%;
+    align-items: center;
 }
 
 .footer{
@@ -16,6 +17,8 @@
     color: brown;
     padding: 1%;
     margin: 1%;
+    border-bottom: solid 3px;
+    border-color: brown;
 }
 
 main.main {
