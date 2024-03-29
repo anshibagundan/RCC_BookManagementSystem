@@ -14,11 +14,12 @@
         <div>
             <h1>RCC Library</h1>
             <h2>蔵書一覧</h2>
+        </div>
+        <div>
             <p>ログインしているユーザー: {{ request.user.username }}</p>
             <a href="{% url 'logout' %}">
                 <button>ログアウト</button>
             </a>
-
         </div>
 
     </header>
