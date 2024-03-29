@@ -7,7 +7,11 @@ import json
 
 # Create your views here.
 def title_page(request):
-    return render(request, 'index.html')
+    return render(request, 'Library_home.html')
+
+def transaction_page(request):
+    return render(request, 'Library_transaction.html') 
+
 
 def book_list(request):
     books = Book.objects.all().values()

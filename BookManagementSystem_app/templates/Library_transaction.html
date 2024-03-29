@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library_transaction</title>
+    <link rel="stylesheet" href="{% static 'RCC_Library.css' %}"> 
+    <link rel="stylesheet" href="{% static 'Library_transaction.css' %}">
+</head>
+<body>
+    <header class="header">
+        <img class="menyu" src="https://th.bing.com/th/id/R.c26f3282c46a0c61678b8a6bdd2a3d94?rik=IJW%2fSz8dXxeHLA&riu=http%3a%2f%2foide43.com%2fwp-content%2fuploads%2f2015%2f08%2fbook_open-monochrome.png&ehk=z61m3nIm2lDpROdC302NlzcODkQxw1UpD%2fd%2baSjOmXo%3d&risl=&pid=ImgRaw&r=0" alt="">
+        <div>
+            <h1>RCC Library</h1>
+            <h2>蔵書一覧</h2>
+        </div>
+        
+    </header>
+
+    <main class="main">
+        <div class="in_book">
+            <div></div>
+            <div class="search">
+                <p>本の検索</p>
+                <label for="bookname">本の名前:</label>
+                <input type="text" id="searchTitle" placeholder="タイトルで検索" onkeyup="filterBooks()" /><br>
+                <label for="genre">ジャンル:</label>
+                <select id="genre" name="genre">
+                    <option value="fiction">Java</option>
+                    <option value="nonfiction">Python</option>
+                    <option value="fantasy">HTML/CSS</option>
+                    <option value="mystery">Unity</option>
+                    <!-- 他のジャンルのオプションを追加することができます -->
+                </select>
+            </div>
+            <div></div>
+        </div>        
+        <div class="books_table">
+            <table id="modal-books-table"></table>
+        </div>
+        <div id="borrowing_form">
+            貸出フォームへha
+            
+            <p id="borrow_book_title">hi</p>
+        </div>
+    </main>
+
+    <!-- Loading ポップアップ -->
+    <div id="loadingPopup"
+        style="display:none; position:fixed; z-index:2; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5);">
+        <div
+            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 5px;">
+            Now Loading...
+        </div>
+    </div>
+
+    <script src="{% static 'Library_transaction.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('input[name="selectedBooks"]');
+            checkboxes.forEach(function (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    Check(this.checked, this.parentNode.nextElementSibling.textContent); // チェックボックスの状態が変わったときに Check 関数を呼び出す
+                });
+            });
+        });
+
+        function Check(checked, title) {
+            if (checked) {
+                document.querySelector('#borrow_book_title').innerHTML = title;
+            } else {
+                document.querySelector('#borrow_book_title').innerHTML = '選択されていません';
+            }
+        }
+    </script>
+</body>
+</html>
