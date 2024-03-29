@@ -38,12 +38,29 @@ function applyFunctionToAllInputs() {
         input.addEventListener('change', function () {
             console.log(this.checked + this.value); // 選択されたらtrue、選択解除はfalse
             if (this.checked) {
-                document.querySelector('#borrow_book_title').innerHTML = this.value;
+                let selectedBooks = document.querySelector('#borrow_book_title');
+                if (selectedBooks.innerHTML !== '選択されていません') {
+                    selectedBooks.innerHTML += '<br>';
+                    selectedBooks.innerHTML += this.value;
+                } else {
+                    selectedBooks.innerHTML = this.value;
+                }
             } else {
-                // チェックが外れた場合の処理をここに記述
-                // 例えば、元のテキストを設定するなど
-                document.querySelector('#borrow_book_title').innerHTML = '選択されていません';
+                let selectedBooks = document.querySelector('#borrow_book_title');
+                // チェックが外れた場合、対応する <br> も減らす
+                let newValue = selectedBooks.innerHTML.replace(this.value, '');
+                let brCount = (newValue.match(/<br>/g) || []).length;
+                if (brCount > 0) {
+                    newValue = newValue.replace(/<br>/, '');
+                }
+                selectedBooks.innerHTML = newValue;
+
+                // テキストが空になった場合に '選択されていません' を表示
+                if (newValue.trim() === '') {
+                    selectedBooks.innerHTML = '選択されていません';
+                }
             }
+
         });
     });
 }
