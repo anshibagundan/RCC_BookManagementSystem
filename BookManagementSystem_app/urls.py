@@ -1,7 +1,12 @@
-from django.contrib import admin
-from django.urls import path,include
+from django.urls import path
+from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    # ここにアプリケーションのURLパターンを定義します。
-    # 例: path('example/', views.example_view, name='example'),
+    path('', views.title_page, name='title_page'),
+    path('books/', views.book_list, name='book_list'),
+    path('books/update/<int:book_id>/', views.update_book, name='update_book'),
+    path('books/transaction/', views.transaction_page, name='transaction_page'),
+    path('login/', views.user_login, name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]

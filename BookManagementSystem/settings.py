@@ -16,6 +16,13 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'BookManagementSystem_app', 'static'),
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -50,9 +57,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'BookManagementSystem_app.middleware.RestrictIPAddressMiddleware',
 ]
 
 ROOT_URLCONF = 'BookManagementSystem.urls'
+
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 TEMPLATES = [
     {
@@ -132,3 +144,4 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGOUT_REDIRECT_URL = ''
