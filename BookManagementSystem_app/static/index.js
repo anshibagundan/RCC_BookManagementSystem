@@ -10,6 +10,7 @@ function fetchBooks() {
             const row = `
                 <tr>
                     <td>${book.title}</td>
+                    <td> genre </td>
                     <td>${borrower}</td> <!-- 貸出者の情報を表示 -->
                     <td>${borrowStatus}</td> <!-- 貸出状態を表示 -->
                 </tr>
@@ -59,7 +60,7 @@ function toggleBorrowReturn(bookId, isBorrow) {
     });
 }
 
-function fetchBooksForModal() {
+window.onload = function fetchBooksForModal() {
     fetch('/books/')
     .then(response => response.json())
     .then(data => {
@@ -95,5 +96,6 @@ function filterBooks() {
         }
     }
 }
+
 
 

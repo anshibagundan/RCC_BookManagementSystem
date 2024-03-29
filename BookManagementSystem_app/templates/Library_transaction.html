@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library_transaction</title>
+    <link rel="stylesheet" href="{% static 'RCC_Library.css' %}"> 
+    <link rel="stylesheet" href="{% static 'Library_transaction.css' %}">
+</head>
+<body>
+    <header class="header">
+        <img class="menyu" src="https://th.bing.com/th/id/R.c26f3282c46a0c61678b8a6bdd2a3d94?rik=IJW%2fSz8dXxeHLA&riu=http%3a%2f%2foide43.com%2fwp-content%2fuploads%2f2015%2f08%2fbook_open-monochrome.png&ehk=z61m3nIm2lDpROdC302NlzcODkQxw1UpD%2fd%2baSjOmXo%3d&risl=&pid=ImgRaw&r=0" alt="">
+        <div>
+            <h1>RCC Library</h1>
+            <h2>蔵書一覧</h2>
+        </div>
+        
+    </header>
+
+    <main class="main">
+        <div class="in_book">
+            <div></div>
+            <div class="search">
+                <p>本の検索</p>
+                <label for="bookname">本の名前:</label>
+                <input type="text" id="searchTitle" placeholder="タイトルで検索" onkeyup="filterBooks()" /><br>
+                <label for="genre">ジャンル:</label>
+                <select id="genre" name="genre">
+                    <option value="fiction">Java</option>
+                    <option value="nonfiction">Python</option>
+                    <option value="fantasy">HTML/CSS</option>
+                    <option value="mystery">Unity</option>
+                    <!-- 他のジャンルのオプションを追加することができます -->
+                </select>
+            </div>
+            <div></div>
+        </div>        
+        <div class="books_table">
+            <table id="modal-books-table"></table>
+        </div>
+        <div id="borrowing_form">
+            貸出フォームへ
+            <p id="borrow_book_title">hogehoge</p>
+        </div>
+    </main>
+
+    <!-- Loading ポップアップ -->
+    <div id="loadingPopup"
+        style="display:none; position:fixed; z-index:2; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5);">
+        <div
+            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 5px;">
+            Now Loading...
+        </div>
+    </div>
+
+    <script>
+        window.onload = function fetchBooksForModal() {
+                fetch('/books/')
+                    .then(response => response.json())
+                    .then(data => {
+                        const booksTable = document.getElementById('modal-books-table');
+                        booksTable.innerHTML = '<thead class="table_header"><tr><th></th><th>タイトル</th><th>ジャンル</th><th>利用者</th><th>貸出状況</th></tr></thead>';
+                        const tbody = document.createElement('tbody');
+                        data.forEach(book => {
+                            const row = document.createElement('tr');
+                            // チェックボックスを1列目に挿入
+                            const checkboxCell = document.createElement('td');
+                            const checkbox = document.createElement('input');
+                            checkbox.id = 'checkbox' + book.id;
+                            checkbox.type = 'checkbox';
+                            checkbox.name = 'selectedBooks';
+                            checkbox.value = book.id; // 書籍のIDなどを設定
+                            console.log(checkbox.id = 'checkbox' + book.id);
+                            checkbox.checked = Check(checkbox.checked, book.title);//tuika
+                            checkboxCell.appendChild(checkbox);
+                            row.appendChild(checkboxCell);
+                            // タイトル、ジャンル、利用者、貸出状況を挿入
+                            row.innerHTML += `
+                    <td>${book.title}</td>
+                    <td>genre</td>
+                    <td>${book.user}</td>
+                    <td>${book.isborrow ? '貸出中' : '利用可能'}</td>
+                `;
+                            tbody.appendChild(row);
+                        });
+                        booksTable.appendChild(tbody);
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function Check(checked, title) {
+                console.log(1);
+                if (checked) {
+                    document.querySelector('#borrow_book_title').innerHTML = title;
+                } else {
+                    // チェックが外れた場合の処理をここに記述
+                    // 例えば、元のテキストを設定するなど
+                    document.querySelector('#borrow_book_title').innerHTML = '選択されていません';
+                }
+            }
+
+
+
+            function filterBooks() {
+                const searchQuery = document.getElementById('searchTitle').value.toLowerCase();
+                const books = document.getElementById('modal-books-table').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+                for (let i = 0; i < books.length; i++) {
+                    const title = books[i].getElementsByTagName('td')[1].textContent;
+                    if (title.toLowerCase().indexOf(searchQuery) > -1) {
+                        books[i].style.display = "";
+                    } else {
+                        books[i].style.display = "none";
+                    }
+                }
+            }
+    </script>
+    <!-- <script src="{% static 'Library_transaction.js' %}"></script> -->
+</body>
+</html>
