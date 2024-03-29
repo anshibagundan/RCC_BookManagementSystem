@@ -15,9 +15,7 @@ window.onload = function fetchBooksForModal() {
                 checkbox.name = 'selectedBooks';
                 checkbox.value = book.id; // 書籍のIDなどを設定
                 console.log(checkbox.id = 'checkbox' + book.id);
-                checkbox.addEventListener('click', function() {
-                    Check(this.checked, book.title); // チェックボックスの状態が変わったときに Check 関数を呼び出す
-                });
+                checkbox.checked = Check(checkbox.checked, book.title);//tuika
                 checkboxCell.appendChild(checkbox);
                 row.appendChild(checkboxCell);
                 // タイトル、ジャンル、利用者、貸出状況を挿入
