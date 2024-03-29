@@ -19,7 +19,7 @@ window.onload = function fetchBooksForModal() {
                 // タイトル、ジャンル、利用者、貸出状況を挿入
                 row.innerHTML += `
                     <td>${book.title}</td>
-                    <td>${book.genre.name}</td>
+                    <td>${book.genre}</td>
                     <td>${book.user}</td>
                     <td>${book.isborrow ? '貸出中' : '利用可能'}</td>
                 `;
