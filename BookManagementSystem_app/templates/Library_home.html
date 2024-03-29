@@ -19,7 +19,7 @@
                 ※我々はRCCである．<br>
                 　サークルルームはまだニャイ( ﾉД`)ｼｸｼｸ…<br><br>
             </div>
-            
+
             <div>
                 <div class="Subheading">
                     注意事項
@@ -28,83 +28,35 @@
                     1.本の貸し借りの作業は共同スペースの白ＰＣのみから行うことができる
                 </div>
             </div>
-            
-            <div>
-                <div class="Subheading">
-                    おすすめ本
-                </div>
-                <div>
-                    今週のおすすめ
-                    <div class="Recommended_Books">
-                        <div class="Books">
-                            <div class="Img_flam">
-                                <img class="Books_img" src="https://kids.nifty.com/wp/wp-content/uploads/2022/01/book_ic.png"
-                                    alt="本１">
-                            </div>
-                            本のタイトル：<br>
-                            本の説明：
-                        </div>
-                        <div class="Books">
-                            <div class="Img_flam">
-                                <img class="Books_img" src="https://kids.nifty.com/wp/wp-content/uploads/2022/01/book_ic.png"
-                                    alt="本2">
-                            </div>
-                            本のタイトル：<br>
-                            本の説明：
-                        </div>
-                        <div class="Books">
-                            <div class="Img_flam">
-                                <img class="Books_img" src="https://kids.nifty.com/wp/wp-content/uploads/2022/01/book_ic.png"
-                                    alt="本2">
-                            </div>
-                            本のタイトル：<br>
-                            本の説明：
-                        </div>
-                        <div class="Books">
-                            <div class="Img_flam">
-                                <img class="Books_img" src="https://kids.nifty.com/wp/wp-content/uploads/2022/01/book_ic.png"
-                                    alt="本１">
-                            </div>
-                            本のタイトル：<br>
-                            本の説明：
-                        </div>
-                        <div class="Books">
-                            <div class="Img_flam">
-                                <img class="Books_img" src="https://kids.nifty.com/wp/wp-content/uploads/2022/01/book_ic.png"
-                                    alt="本2">
-                            </div>
-                            本のタイトル：<br>
-                            本の説明：
-                        </div>
-                        <div class="Books">
-                            <div class="Img_flam">
-                                <img class="Books_img" src="https://kids.nifty.com/wp/wp-content/uploads/2022/01/book_ic.png"
-                                    alt="本2">
-                            </div>
-                            本のタイトル：<br>
-                            本の説明：
-                        </div>
-                    </div>
-                </div>
+
+            <div class="Subheading">
+    おすすめ本
+</div>
+<div>
+    今週のおすすめ
+    <div class="Recommended_Books">
+        {% for book in random_books %}
+        <div class="Books">
+            <div class="Img_flam">
+                <img class="Books_img" src="https://kids.nifty.com/wp/wp-content/uploads/2022/01/book_ic.png" alt="{{ book.title }}">
             </div>
-            
+            本のタイトル：{{ book.title }}<br>
+            本の説明：
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
             <div class="Subheading">
                 ジャンル本
             </div>
-            
+
         </div>
         <div class="right_body">
             <div>
-                <label for="username">ユーザー名:</label>
-                <input type="text" id="username" name="username">
-                <br>
-                <label for="userpasward">Pasward:</label>
-                <input type="text" id="userpasward" name="userpasward">
-                <br>
-                <a href="{% url 'transaction_page' %}">
-                    <button>
-                        ログイン
-                    </button>
+                <a href="{% url 'login' %}">
+                    <button>ログイン</button>
                 </a>
             </div>
         </div>
