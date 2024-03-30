@@ -10,7 +10,7 @@ window.onload = function fetchBooksForModal() {
                 // チェックボックスを1列目に挿入
                 const checkboxCell = document.createElement('td');
                 const checkbox = document.createElement('input');
-                checkbox.id = book.id;
+                checkbox.className = book.id;
                 checkbox.type = 'checkbox';
                 checkbox.name = 'selectedBooks';
                 checkbox.value = book.title; // 書籍のIDなどを設定
@@ -24,7 +24,7 @@ window.onload = function fetchBooksForModal() {
                 row.innerHTML += `
                     <td>${book.title}</td>
                     <td>${book.genre_id === 1 ? 'Python' : (book.genre_id === 2 ? 'Java' : book.genre_id)}</td>
-                    <td>${book.user}</td>
+                    <td>${book.user_id}</td>
                     <td>${book.isborrow ? '貸出中' : '利用可能'}</td>
                 `;
 
@@ -33,10 +33,26 @@ window.onload = function fetchBooksForModal() {
             booksTable.appendChild(tbody);
 
 
-            const gridContainer = document.getElementById('gride-books-table');
+            const gridContainer = document.getElementById('grid-books-table');
             data.forEach(book => {
                 const gridItem = document.createElement('div');
                 gridItem.classList.add('grid-item');
+
+                gridItem.style.boxShadow = '0px 0px 2px rgba(0, 0, 0, 0.5)';
+                gridItem.style.backgroundColor = 'aliceblue';
+
+                const checkboxDiv = document.createElement('div');
+                const checkbox = document.createElement('input');
+                checkbox.className = book.id;
+                checkbox.type = 'checkbox';
+                checkbox.name = 'selectedBooks';
+                checkbox.value = book.title; // 書籍のIDなどを設定
+                // book.isborrow が true の場合、チェックボックスを無効化
+                if (book.isborrow) {
+                    checkbox.disabled = true;
+                }
+                checkboxDiv.appendChild(checkbox);
+                gridItem.appendChild(checkboxDiv);
 
                 // タイトルを追加
                 const titleDiv = document.createElement('div');
@@ -50,8 +66,9 @@ window.onload = function fetchBooksForModal() {
 
                 // 利用者を追加
                 const userDiv = document.createElement('div');
-                userDiv.textContent = book.user;
+                userDiv.textContent = book.user_id !== null ? book.user_id : 'null';
                 gridItem.appendChild(userDiv);
+
 
                 // 貸出状況を追加
                 const statusDiv = document.createElement('div');
@@ -104,21 +121,49 @@ function filterBooks() {
     const searchQuery = document.getElementById('searchTitle').value.toLowerCase();
     const selectedGenre = document.getElementById('genre').value;
     const selectedCando = document.getElementById('can_do').value;
-    const books = document.getElementById('modal-books-table').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 
-    for (let i = 0; i < books.length; i++) {
-        const title = books[i].getElementsByTagName('td')[1].textContent;
-        const genre = books[i].getElementsByTagName('td')[2].textContent;
-        const can_do = books[i].getElementsByTagName('td')[4].textContent;
+    // テーブル内の書籍をフィルタリング
+    const tableBooks = document.getElementById('modal-books-table').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+    for (let i = 0; i < tableBooks.length; i++) {
+        const title = tableBooks[i].getElementsByTagName('td')[1].textContent;
+        const genre = tableBooks[i].getElementsByTagName('td')[2].textContent;
+        const can_do = tableBooks[i].getElementsByTagName('td')[4].textContent;
 
-        // タイトルとジャンルの両方が検索クエリと一致する場合のみ表示
+        // タイトルとジャンル、貸出状況の両方が検索クエリと一致する場合のみ表示
         if (title.toLowerCase().indexOf(searchQuery) > -1 && (selectedGenre === 'All' || genre === selectedGenre) && (selectedCando === 'All' || can_do === selectedCando)) {
-            books[i].style.display = "";
+            tableBooks[i].style.display = "";
         } else {
-            books[i].style.display = "none";
+            tableBooks[i].style.display = "none";
         }
     }
+
+    // グリッド内の書籍をフィルタリング
+    const gridBooks = document.querySelectorAll('.grid-item');
+    gridBooks.forEach(book => {
+        const title = book.querySelector('div:nth-child(2)').textContent; // タイトルの要素を取得
+        const genre = book.querySelector('div:nth-child(3)').textContent; // ジャンルの要素を取得
+        const can_do = book.querySelector('div:nth-child(5)').textContent; // 貸出状況の要素を取得
+
+        // タイトルとジャンル、貸出状況の両方が検索クエリと一致する場合のみ表示
+        if (title.toLowerCase().indexOf(searchQuery) > -1 && (selectedGenre === 'All' || genre === selectedGenre) && (selectedCando === 'All' || can_do === selectedCando)) {
+            book.style.display = "";
+        } else {
+            book.style.display = "none";
+        }
+    });
 }
+
+function toggleTable(type) {
+    if (type === 'list') {
+        document.getElementById('modal-books-table').style.display = 'table';
+        document.getElementById('grid-books-table').style.display = 'none';
+    } else if (type === 'grid') {
+        document.getElementById('modal-books-table').style.display = 'none';
+        document.getElementById('grid-books-table').style.display = 'grid';
+    }
+}
+
+
 
 // ダイアログを表示する関数
 function openModal() {
@@ -130,7 +175,7 @@ function openModal() {
 
     const checkboxes = document.querySelectorAll('input[name="selectedBooks"]:checked');
     checkboxes.forEach(checkbox => {
-        const bookId = checkbox.id.replace('checkbox', '');
+        const bookId = checkbox.className.replace('checkbox', '');
         const bookTitle = checkbox.value;
 
         const bookInfo = document.createElement('p');
