@@ -36,8 +36,9 @@ function toggleBorrowReturn(bookId, isBorrow) {
         document.getElementById('loadingPopup').style.display = 'none';
         return;
     }
+    //
     fetch(`/books/update/${bookId}/`, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -59,6 +60,7 @@ function toggleBorrowReturn(bookId, isBorrow) {
         closeModal(); // 貸出/返却モーダルを閉じる関数
     });
 }
+
 
 window.onload = function fetchBooksForModal() {
     fetch('/books/')

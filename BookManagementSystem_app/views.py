@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotFound, HttpResponseBadRequest
 from .models import Book
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -28,16 +28,27 @@ def book_list(request):
 
 @csrf_exempt
 def update_book(request, book_id):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        book = Book.objects.get(id=book_id)
-        book.isborrow = data['isborrow']
-        if not book.isborrow:
-            book.user = ""  # 返却時に貸出者情報をクリア
-        else:
-            book.user = data.get('user', book.user)  # 貸出時に新しい貸出者情報をセット
-        book.save()
-        return JsonResponse({'message': 'Book updated successfully!'})
+    if request.method == 'PUT':
+        try:
+            data = json.loads(request.body)  # リクエストのJSONデータをロード
+            book = Book.objects.get(pk=book_id)  # 対象の書籍を取得
+
+            # ここで書籍のデータを更新
+            book.isborrow = data.get('isborrow', book.isborrow)
+            book.user = data.get('user', book.user)
+            book.save()  # 変更を保存
+
+            # 更新成功のレスポンスを返す
+            return JsonResponse({'message': 'Book updated successfully.'})
+        except Book.DoesNotExist:
+            # 書籍が見つからない場合のエラーレスポンス
+            return HttpResponseNotFound({'message': 'Book not found.'})
+        except (ValueError, KeyError):
+            # 不正なデータが送信された場合のエラーレスポンス
+            return HttpResponseBadRequest({'message': 'Invalid data.'})
+    else:
+        # PUTリクエスト以外でアクセスされた場合のレスポンス
+        return HttpResponseBadRequest({'message': 'Invalid request method.'})
 
 
 def user_login(request):
