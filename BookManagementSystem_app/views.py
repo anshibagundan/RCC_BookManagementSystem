@@ -18,6 +18,9 @@ def title_page(request):
 def transaction_page(request):
     return render(request, 'Library_transaction.html')
 
+def sumple_page(request):
+    return render(request, 'index0.html')
+
 
 def book_list(request):
     books = Book.objects.all().values()
