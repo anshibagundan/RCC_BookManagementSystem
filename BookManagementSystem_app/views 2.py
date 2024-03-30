@@ -50,7 +50,6 @@ def update_book(request, book_id):
         # PUTリクエスト以外でアクセスされた場合のレスポンス
         return HttpResponseBadRequest({'message': 'Invalid request method.'})
 
-
 def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')

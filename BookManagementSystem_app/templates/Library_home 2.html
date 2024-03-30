@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCC Library</title>
+    <link rel="stylesheet" href="{% static 'RCC_Library.css' %}">
+    <link rel="stylesheet" href="{% static 'Library_home.css' %}">
+</head>
+<body>
+    <header class="header">
+        <h1>RCC Library</h1>
+    </header>
+    <div class="home_body">
+        <div class="left_body">
+            <div>
+                適当な文面入れる<br><br>
+                ※我々はRCCである．<br>
+                　サークルルームはまだニャイ( ﾉД`)ｼｸｼｸ…<br><br>
+            </div>
+
+            <div>
+                <div class="Subheading">
+                    注意事項
+                </div>
+                <div>
+                    1.本の貸し借りの作業は共同スペースの白ＰＣのみから行うことができる
+                </div>
+            </div>
+
+            <div class="Subheading">
+    おすすめ本
+</div>
+<div>
+    今週のおすすめ
+    <div class="Recommended_Books">
+        {% for book in random_books %}
+        <div class="Books">
+            <div class="Img_flam">
+                <img class="Books_img" src="https://kids.nifty.com/wp/wp-content/uploads/2022/01/book_ic.png" alt="{{ book.title }}">
+            </div>
+            本のタイトル：{{ book.title }}<br>
+            本の説明：
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+            <div class="Subheading">
+                ジャンル本
+            </div>
+
+        </div>
+        <div class="right_body">
+            <div>
+                <a href="{% url 'login' %}">
+                    <button>ログイン</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <a href="{% url 'sumple_page' %}">問い合わせ先</a>
+        <br>
+        mail:
+    </footer>
+</body>
+</html>
