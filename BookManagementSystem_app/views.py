@@ -35,7 +35,7 @@ def update_book(request, book_id):
 
             # ここで書籍のデータを更新
             book.isborrow = data.get('isborrow', book.isborrow)
-            book.user_id = data.get('user', book.user_id)
+            book.user = data.get('user', book.user)
             book.save()  # 変更を保存
 
             # 更新成功のレスポンスを返す

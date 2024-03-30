@@ -136,7 +136,7 @@
                         row.innerHTML += `
                 <td>${book.title}</td>
                 <td>${book.genre_id === 1 ? 'Python' : (book.genre_id === 2 ? 'Java' : book.genre_id)}</td>
-                <td>${book.user_id}</td>
+                <td>${book.user !== null ? book.user : 'null'}</td>
                 <td>${book.isborrow ? '貸出中' : '利用可能'}</td>
             `;
 
@@ -178,7 +178,7 @@
 
                         // 利用者を追加
                         const userDiv = document.createElement('div');
-                        userDiv.textContent = book.user_id !== null ? book.user_id : 'null';
+                        userDiv.textContent = book.user !== null ? book.user : 'null';
                         gridItem.appendChild(userDiv);
 
 
@@ -293,7 +293,7 @@
                 const bookInfo = document.createElement('p');
                 bookInfo.textContent = `ID: ${bookId}, タイトル: ${bookTitle}`;
                 checkedBooksContainer.appendChild(bookInfo);
-                // toggleBorrowReturn(bookId, true);
+                toggleBorrowReturn(bookId, true);
             });
         }
 
@@ -313,11 +313,11 @@
                 return;
             }
             fetch(`/books/update/${bookId}/`, {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ isborrow: isBorrow, user: user.trim() }), // user.trim() を使って空白を削除
+                body: JSON.stringify({ isborrow: isBorrow, user: 2 }), // user.trim() を使って空白を削除
             })
                 .then(response => response.json())
                 .then(data => {
