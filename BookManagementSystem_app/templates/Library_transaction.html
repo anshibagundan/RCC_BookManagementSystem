@@ -17,9 +17,10 @@
         </div>
         <div id="user-info" data-username="{{ request.user.username }}">
             <p>ログインしているユーザー: {{ request.user.username }}</p>
-            <a href="{% url 'logout' %}">
-                <button>ログアウト</button>
-            </a>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">ログアウト</button>
+            </form>
         </div>
 
     </header>
@@ -170,7 +171,7 @@
                                 checkbox.disabled = true;
                             }
                         }
-                        
+
                         checkboxCell.appendChild(checkbox);
                         row.appendChild(checkboxCell);
                         // タイトル、ジャンル、利用者、貸出状況を挿入
