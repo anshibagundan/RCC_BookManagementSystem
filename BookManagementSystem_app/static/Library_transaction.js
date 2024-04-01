@@ -1,7 +1,21 @@
-window.onload = function fetchBooksForModal() {
+window.onload = function creatBooksForModal() {
+    fetchBooksForModal('borrow_book');
+}
+
+function updateBooksInformation(type) {
+    fetchBooksForModal(type);
+}
+
+function fetchBooksForModal(type) {
     fetch('/books/')
         .then(response => response.json())
         .then(data => {
+            let selectedBooks = document.querySelector('#borrow_book_title');
+            selectedBooks.innerHTML = '選択されていません';
+            let selectedBooks1 = document.querySelector('#return_book_title');
+            selectedBooks1.innerHTML = '選択されていません';
+            const userInfo = document.getElementById('user-info');
+            const username = userInfo.dataset.username; //usernameの取り出した変数
             const booksTable = document.getElementById('modal-books-table');
             booksTable.innerHTML = '<thead class="table_header"><tr><th></th><th>タイトル</th><th>ジャンル</th><th>利用者</th><th>貸出状況</th></tr></thead>';
             const tbody = document.createElement('tbody');
@@ -14,17 +28,25 @@ window.onload = function fetchBooksForModal() {
                 checkbox.type = 'checkbox';
                 checkbox.name = 'selectedBooks';
                 checkbox.value = book.title; // 書籍のIDなどを設定
-                // book.isborrow が true の場合、チェックボックスを無効化
-                if (book.isborrow) {
-                    checkbox.disabled = true;
+                if (type === 'borrow_book') {
+                    // book.isborrow が true の場合、チェックボックスを無効化
+                    if (book.isborrow) {
+                        checkbox.disabled = true;
+                    }
+                } else if (type === 'return_book') {
+                    console.log(username + ";" + book.user);
+                    if (!book.isborrow || username !== book.user) {
+                        checkbox.disabled = true;
+                    }
                 }
+
                 checkboxCell.appendChild(checkbox);
                 row.appendChild(checkboxCell);
                 // タイトル、ジャンル、利用者、貸出状況を挿入
                 row.innerHTML += `
                     <td>${book.title}</td>
                     <td>${book.genre_id === 1 ? 'Python' : (book.genre_id === 2 ? 'Java' : book.genre_id)}</td>
-                    <td>${book.user_id}</td>
+                    <td>${book.user !== null ? book.user : 'null'}</td>
                     <td>${book.isborrow ? '貸出中' : '利用可能'}</td>
                 `;
 
@@ -32,8 +54,9 @@ window.onload = function fetchBooksForModal() {
             });
             booksTable.appendChild(tbody);
 
-
             const gridContainer = document.getElementById('grid-books-table');
+            gridContainer.innerHTML = ''; // グリッドの内容をクリア
+
             data.forEach(book => {
                 const gridItem = document.createElement('div');
                 gridItem.classList.add('grid-item');
@@ -66,9 +89,8 @@ window.onload = function fetchBooksForModal() {
 
                 // 利用者を追加
                 const userDiv = document.createElement('div');
-                userDiv.textContent = book.user_id !== null ? book.user_id : 'null';
+                userDiv.textContent = book.user !== null ? book.user : 'null';
                 gridItem.appendChild(userDiv);
-
 
                 // 貸出状況を追加
                 const statusDiv = document.createElement('div');
@@ -78,7 +100,7 @@ window.onload = function fetchBooksForModal() {
                 gridContainer.appendChild(gridItem);
             });
 
-            // applyFunctionToAllInputs 関数を呼び出す
+            // 更新後にチェックボックスの動作を適用
             applyFunctionToAllInputs();
         })
         .catch(error => console.error('Error:', error));
@@ -91,11 +113,18 @@ function applyFunctionToAllInputs() {
             console.log(this.checked + this.value); // 選択されたらtrue、選択解除はfalse
             if (this.checked) {
                 let selectedBooks = document.querySelector('#borrow_book_title');
+                let selectedBooks1 = document.querySelector('#return_book_title');
                 if (selectedBooks.innerHTML !== '選択されていません') {
                     selectedBooks.innerHTML += '<br>';
                     selectedBooks.innerHTML += this.value;
                 } else {
                     selectedBooks.innerHTML = this.value;
+                }
+                if (selectedBooks1.innerHTML !== '選択されていません') {
+                    selectedBooks1.innerHTML += '<br>';
+                    selectedBooks1.innerHTML += this.value;
+                } else {
+                    selectedBooks1.innerHTML = this.value;
                 }
             } else {
                 let selectedBooks = document.querySelector('#borrow_book_title');
@@ -110,6 +139,20 @@ function applyFunctionToAllInputs() {
                 // テキストが空になった場合に '選択されていません' を表示
                 if (newValue.trim() === '') {
                     selectedBooks.innerHTML = '選択されていません';
+                }
+
+                let selectedBooks1 = document.querySelector('#return_book_title');
+                // チェックが外れた場合、対応する <br> も減らす
+                let newValue1 = selectedBooks1.innerHTML.replace(this.value, '');
+                let brCount1 = (newValue1.match(/<br>/g) || []).length;
+                if (brCount1 > 0) {
+                    newValue1 = newValue1.replace(/<br>/, '');
+                }
+                selectedBooks1.innerHTML = newValue1;
+
+                // テキストが空になった場合に '選択されていません' を表示
+                if (newValue1.trim() === '') {
+                    selectedBooks1.innerHTML = '選択されていません';
                 }
             }
 
@@ -166,8 +209,8 @@ function toggleTable(type) {
 
 
 // ダイアログを表示する関数
-function openModal() {
-    document.getElementById('borrowReturnModal').style.display = 'block';
+function openModal(type) {
+    document.getElementById('borrowReturnModal').style.display = 'none';
 
     // チェックされた書籍を取得
     const checkedBooksContainer = document.getElementById('checked_books');
@@ -181,7 +224,7 @@ function openModal() {
         const bookInfo = document.createElement('p');
         bookInfo.textContent = `ID: ${bookId}, タイトル: ${bookTitle}`;
         checkedBooksContainer.appendChild(bookInfo);
-        // toggleBorrowReturn(bookId, true);
+        toggleBorrowReturn(bookId, type);
     });
 }
 
@@ -192,34 +235,51 @@ function closeModal() {
 
 
 function toggleBorrowReturn(bookId, isBorrow) {
+    const userInfo = document.getElementById('user-info');
+    const username = userInfo.dataset.username;
     document.getElementById('loadingPopup').style.display = 'block';
-    let user = isBorrow ? prompt("貸出者の名前を入力してください:") : '';
-
-    if (isBorrow && (user === null || user.trim() === '')) {
-        alert('貸出者の名前が入力されていません。');
-        document.getElementById('loadingPopup').style.display = 'none';
-        return;
+    if (isBorrow) {
+        fetch(`/books/update/${bookId}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ isborrow: isBorrow, user: username }), // user.trim() を使って空白を削除
+        })
+            .then(response => response.json())
+            .finally(() => {
+                // すべてのポップアップを閉じる
+                updateBooksInformation('borrow_book');
+                document.getElementById('loadingPopup').style.display = 'none';
+                closeModal(); // 貸出/返却モーダルを閉じる関数
+            });
+    } else if (!isBorrow) {
+        fetch(`/books/update/${bookId}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ isborrow: false, user: null }), // user.trim() を使って空白を削除
+        })
+            .then(response => response.json())
+            .finally(() => {
+                // すべてのポップアップを閉じる
+                updateBooksInformation('borrow_book');
+                document.getElementById('loadingPopup').style.display = 'none';
+                closeModal(); // 貸出/返却モーダルを閉じる関数
+            });
     }
-    fetch(`/books/update/${bookId}/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ isborrow: isBorrow, user: user.trim() }), // user.trim() を使って空白を削除
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message);
-            fetchBooksForModal();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('操作に失敗しました。');
-        })
-        .finally(() => {
-            // すべてのポップアップを閉じる
-            fetchBooks();
-            document.getElementById('loadingPopup').style.display = 'none';
-            closeModal(); // 貸出/返却モーダルを閉じる関数
-        });
+}
+
+function borrow_books() {
+    document.getElementById('borrow_field').style.display = 'block';
+    document.getElementById('return_field').style.display = 'none';
+    updateBooksInformation('borrow_book')
+}
+
+
+function return_books() {
+    document.getElementById('borrow_field').style.display = 'none';
+    document.getElementById('return_field').style.display = 'block';
+    updateBooksInformation('return_book')
 }

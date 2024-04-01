@@ -15,6 +15,7 @@
     width: auto;
     height: auto;
     background-color: blanchedalmond;
+    box-shadow: 3px 3px 4px rgba(231, 110, 110, 0.7);
     justify-content: center;
     align-items: center;
 }
@@ -22,7 +23,6 @@
 .Img_flam{
     width: 99%;
     height: auto;
-    border: solid 1px;
 }
 
 .Books_img{

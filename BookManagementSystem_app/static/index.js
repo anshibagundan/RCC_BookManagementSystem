@@ -36,6 +36,7 @@ function toggleBorrowReturn(bookId, isBorrow) {
         document.getElementById('loadingPopup').style.display = 'none';
         return;
     }
+    //
     fetch(`/books/update/${bookId}/`, {
         method: 'PUT',
         headers: {
