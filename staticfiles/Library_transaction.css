@@ -1,9 +1,7 @@
 body{
     text-align: center;
 }
-table{
-    width: 10%;
-}
+
 .in_book{
     display: grid;
     grid-template-columns: 25% 1fr 25%;
@@ -23,8 +21,6 @@ table{
 .books_table {
     display: inline-table;
     width: 90%;
-    margin: 1%;
-    padding: 1%;
 }
 
 .table_header{
@@ -32,7 +28,7 @@ table{
     color: white;
 }
 
-.books_table table {
+table {
     width: 100%;
     /* テーブルの幅いっぱいに広げる */
     border-collapse: collapse;
@@ -40,16 +36,14 @@ table{
 }
 
 /* 一つ目の列の幅を指定 */
-td:first-child,
-th:first-child {
+.books_table td:first-child,th:first-child {
     width: 30px;
     border: 1px solid black;
     /* 親要素の幅の1/4 */
 }
 
 /* 二つ目以降の列の幅を均等に分割 */
-td:not(:first-child),
-th:not(:first-child) {
+.books_table td:not(:first-child),th:not(:first-child) {
     width: calc((100% -30px) / 4);
     border: 1px solid black;
     /* 残りの幅を4等分 */
@@ -58,3 +52,32 @@ th:not(:first-child) {
 tbody {
     background-color: aliceblue;
 }
+
+.search td{
+    width: calc((100%) / 2);
+    border: solid 1px;
+}
+
+#gride-books-table{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+}
+
+#modal-books-table{
+    display: table;
+}
+
+#toggle_and_button {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+#borrow-return-mode-toggles{
+    text-align: start;
+}
+
+#list-grid-table-buttons{
+    text-align: end;
+}
+
