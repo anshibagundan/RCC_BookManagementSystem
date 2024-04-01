@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library_transaction</title>
+    <link rel="stylesheet" href="{% static 'RCC_Library.css' %}">
+    <link rel="stylesheet" href="{% static 'Library_transaction.css' %}">
+    <style>
+        #borrow_field{
+            background-color: #fefefe;
+        }
+        #return_field{
+            background-color: aqua;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <img class="menyu"
+            src="https://th.bing.com/th/id/R.c26f3282c46a0c61678b8a6bdd2a3d94?rik=IJW%2fSz8dXxeHLA&riu=http%3a%2f%2foide43.com%2fwp-content%2fuploads%2f2015%2f08%2fbook_open-monochrome.png&ehk=z61m3nIm2lDpROdC302NlzcODkQxw1UpD%2fd%2baSjOmXo%3d&risl=&pid=ImgRaw&r=0"
+            alt="">
+        <div>
+            <h1>RCC Library</h1>
+            <h2>蔵書一覧</h2>
+        </div>
+        <div id="user-info" data-username="{{ request.user.username }}">
+            <p>ログインしているユーザー: {{ request.user.username }}</p>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">ログアウト</button>
+            </form>
+        </div>
+
+    </header>
+
+    <main class="main">
+        <div class="in_book">
+            <div></div>
+            <div class="search">
+                <p>本の検索</p>
+                <label for="bookname">本の名前:</label>
+                <input type="text" id="searchTitle" placeholder="タイトルで検索" onkeyup="filterBooks()" /><br>
+                <label for="genre">ジャンル:</label>
+                <select id="genre" onclick="filterBooks()">
+                    <option value="All">All</option>
+                    <option value="Python">Python</option>
+                    <option value="Java">Java</option>
+                    <option value="HTML/CSS">HTML/CSS</option>
+                    <option value="Unity">Unity</option>
+                </select><br>
+                <label for="can_do">貸出状況:</label>
+                <select id="can_do" onclick="filterBooks()">
+                    <option value="All">All</option>
+                    <option value="利用可能">利用可能</option>
+                    <option value="貸出中">貸出中</option>
+                </select>
+            </div>
+            <div></div>
+        </div>
+
+        <div id="toggle_and_button">
+            <div id="borrow-return-mode-toggles">
+                <!--  -->
+                <button id="borrow-mode-toggle" onclick="borrow_books()">貸出</button>
+                <button id="return-mode-toggle" onclick="return_books()">返却</button>
+            </div>
+            <div id="list-grid-table-buttons">
+                <button id="list-table-button" onclick="toggleTable('list')">≡</button>
+                <button id="grid-table-button" onclick="toggleTable('grid')">□</button>
+            </div>
+
+        </div>
+
+        <div class="books_table">
+            <table id="modal-books-table"></table>
+            <div id="grid-books-table"
+                style="display: none; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto; gap: 10px;"></div>
+        </div>
+        <div class="in_book">
+            <div></div>
+            <div class="search" id="borrow_field" style="display: block;">
+                <p id="borrowing_form" style="font-weight: bold; font-size: large; color: brown;">"貸出" フォームへ</p>
+                <table>
+                    <tr>
+                        <td>
+                            選択中のリスト
+                        </td>
+                        <td>
+                            <p id="borrow_book_title">選択されていません</p>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <button onclick="openModal(true)">
+                    申請確認
+                </button>
+            </div>
+            <div class="search" id="return_field" style="display: none;">
+                <p id="return_form">"返却" フォームへ</p>
+                <table>
+                    <tr>
+                        <td>
+                            選択中のリスト
+                        </td>
+                        <td>
+                            <p id="return_book_title">選択されていません</p>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <button onclick="openModal(false)">
+                    申請確認
+                </button>
+            </div>
+            <div></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <a href="{% url 'sumple_page' %}">問い合わせ先</a>
+        <br>
+        Mail:
+    </footer>
+
+    <!-- Overlay -->
+    <div id="borrowReturnModal"
+        style="display:none; position:fixed; z-index:1; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4);">
+        <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%;">
+            <span onclick="closeModal()"
+                style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h2>申請フォーム</h2>
+            <div id="checked_books">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading ポップアップ -->
+    <div id="loadingPopup"
+        style="display:none; position:fixed; z-index:2; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5);">
+        <div
+            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 5px;">
+            Now Loading...
+        </div>
+    </div>
+    <script src="{% static 'Library_transaction.js' %}"></script>
+</body>
+
+</html>

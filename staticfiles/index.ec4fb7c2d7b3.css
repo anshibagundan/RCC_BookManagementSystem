@@ -1,0 +1,38 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+th {
+  background-color: #4CAF50;
+  color: white;
+}
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.btn {
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 5px;
+  background-color: #008CBA;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.btn:hover {
+  background-color: #005f73;
+}
+.borrow-return-btn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}

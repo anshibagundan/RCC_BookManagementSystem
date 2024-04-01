@@ -1,0 +1,43 @@
+.Recommended_Books{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+    /* ミニマムで2列、マックスで3列 */
+    grid-gap: 20px;
+    /* グリッド間のスペース */
+    margin: 1%;
+    padding: 1%;
+}
+
+.Books{
+    max-width: 90%;
+    width: auto;
+    height: auto;
+    background-color: blanchedalmond;
+    box-shadow: 3px 3px 4px rgba(231, 110, 110, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.Img_flam{
+    width: 99%;
+    height: auto;
+}
+
+.Books_img{
+    width: 100%;
+    /* 親要素の幅に合わせて画像の幅を100%にする */
+    height: auto;
+    /* アスペクト比を維持して画像の高さを自動調整する */
+    display: block;
+    /* インライン要素としてではなく、ブロック要素として画像を表示する */
+}
+
+.left_body{
+
+}
+
+.right_body{
+    position: relative;
+}
