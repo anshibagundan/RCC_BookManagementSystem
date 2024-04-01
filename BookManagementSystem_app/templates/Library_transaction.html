@@ -8,6 +8,14 @@
     <title>Library_transaction</title>
     <link rel="stylesheet" href="{% static 'RCC_Library.css' %}">
     <link rel="stylesheet" href="{% static 'Library_transaction.css' %}">
+    <style>
+        #borrow_field{
+            background-color: #fefefe;
+        }
+        #return_field{
+            background-color: aqua;
+        }
+    </style>
 </head>
 
 <body>
@@ -75,7 +83,7 @@
         <div class="in_book">
             <div></div>
             <div class="search" id="borrow_field" style="display: block;">
-                <p id="borrowing_form">貸出フォームへ</p>
+                <p id="borrowing_form" style="font-weight: bold; font-size: large; color: brown;">"貸出" フォームへ</p>
                 <table>
                     <tr>
                         <td>
@@ -92,7 +100,7 @@
                 </button>
             </div>
             <div class="search" id="return_field" style="display: none;">
-                <p id="return_form">返却フォームへ</p>
+                <p id="return_form">"返却" フォームへ</p>
                 <table>
                     <tr>
                         <td>

@@ -210,7 +210,7 @@ function toggleTable(type) {
 
 // ダイアログを表示する関数
 function openModal(type) {
-    document.getElementById('borrowReturnModal').style.display = 'block';
+    document.getElementById('borrowReturnModal').style.display = 'none';
 
     // チェックされた書籍を取得
     const checkedBooksContainer = document.getElementById('checked_books');
