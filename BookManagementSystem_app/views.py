@@ -15,9 +15,11 @@ def title_page(request):
     return render(request, 'Library_home.html', {'random_books': random_books})
 
 @login_required
+@csrf_exempt
 def transaction_page(request):
     return render(request, 'Library_transaction.html')
 
+@csrf_exempt
 def sumple_page(request):
     return render(request, 'index0.html')
 
