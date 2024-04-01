@@ -21,8 +21,6 @@ body{
 .books_table {
     display: inline-table;
     width: 90%;
-    margin: 1%;
-    padding: 1%;
 }
 
 .table_header{
@@ -69,3 +67,17 @@ tbody {
 #modal-books-table{
     display: table;
 }
+
+#toggle_and_button {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+#borrow-return-mode-toggles{
+    text-align: start;
+}
+
+#list-grid-table-buttons{
+    text-align: end;
+}
+
