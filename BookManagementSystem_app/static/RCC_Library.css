@@ -39,7 +39,7 @@ main.main {
 
 .home_body{
     display: grid;
-    grid-template-columns: 75% 25%;
+    grid-template-columns: 1fr auto;
 }
 
 .menyu{

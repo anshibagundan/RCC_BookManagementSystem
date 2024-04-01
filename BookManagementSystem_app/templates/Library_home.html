@@ -33,34 +33,39 @@
             </div>
 
             <div class="Subheading">
-    おすすめ本
-</div>
-<div>
-    今週のおすすめ
-    <div class="Recommended_Books">
-        {% for book in random_books %}
-        <div class="Books">
-            <div class="Img_flam">
-                <img class="Books_img" src="https://kids.nifty.com/wp/wp-content/uploads/2022/01/book_ic.png" alt="{{ book.title }}">
+                おすすめ本
             </div>
-            本のタイトル：{{ book.title }}<br>
-            本の説明：
-        </div>
-        {% endfor %}
-    </div>
-</div>
+            <div>
+                今週のおすすめ
+                <div class="Recommended_Books">
+                    {% for book in random_books %}
+                    <div class="Books">
+                        <div class="Img_flam">
+                            <img class="Books_img" src="https://kids.nifty.com/wp/wp-content/uploads/2022/01/book_ic.png" alt="{{ book.title }}">
+                        </div>
+                        本のタイトル：{{ book.title }}<br>
+                        本の説明：
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
 
 
             <div class="Subheading">
                 ジャンル本
             </div>
-
         </div>
+
         <div class="right_body">
             <div>
                 <a href="{% url 'login' %}">
                     <button>ログイン</button>
                 </a>
+            </div>
+            <div>
+                <a class="twitter-timeline" data-width="400" data-height="400" data-theme="light"
+                    href="https://twitter.com/rits_rcc?ref_src=twsrc%5Etfw">Tweets by rits_rcc</a>
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
             </div>
         </div>
     </div>
