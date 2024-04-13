@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,8 +11,27 @@
     <link rel="icon"
         href="https://th.bing.com/th?id=ODLS.ee33f649-5101-4a0a-9eaa-3e74da573d69&w=32&h=32&qlt=90&pcl=fffffa&o=6&pid=1.2"
         type="image/png">
+    <style>
+        #cursor {
+            width: 40px;
+            height: 40px;
+            background-image: url("https://th.bing.com/th/id/OIP.AgyaqTDSeFBq_erqCItxCAHaHa?rs=1&pid=ImgDetMain");
+            background-size: contain;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            cursor: none;
+        }
+    </style>
 </head>
-<body>
+
+<body style="cursor: none;">
+    <div id="cursor"></div>
+    <div id="stalker"></div>
     <header class="header">
         <h1>RCC Library</h1>
     </header>
@@ -41,7 +61,9 @@
                     {% for book in random_books %}
                     <div class="Books">
                         <div class="Img_flam">
-                            <img class="Books_img" src="https://kids.nifty.com/wp/wp-content/uploads/2022/01/book_ic.png" alt="{{ book.title }}">
+                            <img class="Books_img"
+                                src="https://kids.nifty.com/wp/wp-content/uploads/2022/01/book_ic.png"
+                                alt="{{ book.title }}">
                         </div>
                         本のタイトル：{{ book.title }}<br>
                         本の説明：
@@ -75,5 +97,20 @@
         <br>
         mail:
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+        let $cursor = $("#cursor");
+            $(document).on('mousemove', function (e) {
+                let x = e.clientX;
+                let y = e.clientY;
+                $cursor.css({
+                    'top': y + 'px',
+                    'left': x + 'px',
+                    'transform': 'translate(-50%, -50%)',
+                })
+            });
+    </script>
 </body>
+
 </html>
