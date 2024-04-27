@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Self Introduction Animation</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+    }
+  </style>
+  <script src="https://unpkg.com/three@0.132.2/build/three.min.js"></script>
+</head>
+<body>
+  <script>
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    let renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+    camera.position.z = 5;
+
+    let textMeshes = [];
+    let animStartTime = Date.now();
+    let animPhase = 1; // アニメーションの段階
+    let num = 0;
+
+    let loader = new THREE.FontLoader();
+
+    function loadText(text) {
+      loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', font => {
+        const spacing = 60;
+        text.split('').forEach((char, i) => {
+          let geometry = new THREE.TextGeometry(char, {
+            font: font,
+            size: 40,
+            height: 5,
+            curveSegments: 12,
+          });
+          let material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+          let mesh = new THREE.Mesh(geometry, material);
+          mesh.position.x = -400 + i * spacing;
+          mesh.position.y = 0;
+          mesh.position.z = -500;
+          scene.add(mesh);
+          textMeshes.push(mesh);
+        });
+      });
+    }
+
+    loadText('loading   ');
+
+    let circleMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+    let circleGeometry = new THREE.CircleGeometry(1, 64);
+    let circle = new THREE.LineLoop(circleGeometry, circleMaterial);
+    scene.add(circle);
+
+    function animate() {
+      requestAnimationFrame(animate);
+      let elapsedTime = Date.now() - animStartTime;
+
+      if (animPhase === 1) {
+        // 左端から生成
+        if (elapsedTime < 500) {
+          textMeshes.forEach(mesh => {
+            mesh.position.x += 5; // 文字を右に移動
+          });
+        } else {
+          animPhase = 2;
+          animStartTime = Date.now();
+        }
+      } else if (animPhase === 2) {
+        // 右端から削除
+        if (elapsedTime < 500) {
+          let mesh = textMeshes.pop();
+          if (mesh) scene.remove(mesh);
+        } else {
+          if (textMeshes.length === 0) {
+            loadText('loading   ');
+            animPhase = 1;
+            animStartTime = Date.now();
+          }
+        }
+      }
+
+      // 円のアニメーション制御
+      circle.rotation.z += 0.1; // 時計回りに回転
+      circle.scale.x = circle.scale.y = 1 + 0.5 * Math.sin(Date.now() * 0.002); // サイズを変更
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+</body>
+</html>

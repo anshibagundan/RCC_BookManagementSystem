@@ -10,4 +10,5 @@ urlpatterns = [
     path('books/index0/', views.sumple_page, name='sumple_page'),
     path('login/', views.user_login, name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('loading/', views.loading, name='loading')
 ]

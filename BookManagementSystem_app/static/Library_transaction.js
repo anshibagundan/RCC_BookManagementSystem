@@ -45,7 +45,7 @@ function fetchBooksForModal(type) {
                 // タイトル、ジャンル、利用者、貸出状況を挿入
                 row.innerHTML += `
                     <td>${book.title}</td>
-                    <td>${book.genre_id === 1 ? 'Python' : (book.genre_id === 2 ? 'Java' : book.genre_id)}</td>
+                    <td>${book.genre_id === 1 ? '野菜' : (book.genre_id === 2 ? '魚' : book.genre_id)}</td>
                     <td>${book.user !== null ? book.user : 'null'}</td>
                     <td>${book.isborrow ? '貸出中' : '利用可能'}</td>
                 `;
@@ -84,7 +84,7 @@ function fetchBooksForModal(type) {
 
                 // ジャンルを追加
                 const genreDiv = document.createElement('div');
-                genreDiv.textContent = book.genre_id === 1 ? 'Python' : (book.genre_id === 2 ? 'Java' : book.genre_id);
+                genreDiv.textContent = book.genre_id === 1 ? '野菜' : (book.genre_id === 2 ? '魚' : book.genre_id);
                 gridItem.appendChild(genreDiv);
 
                 // 利用者を追加

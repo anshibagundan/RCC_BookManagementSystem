@@ -14,6 +14,9 @@ def title_page(request):
     random_books = random.sample(books_list, min(len(books_list), 6))
     return render(request, 'Library_home.html', {'random_books': random_books})
 
+def loading (request):
+    return render(request, 'loading.html')
+
 @login_required
 @csrf_exempt
 def transaction_page(request):

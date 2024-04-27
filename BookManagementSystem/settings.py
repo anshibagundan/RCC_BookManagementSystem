@@ -34,7 +34,7 @@ SECRET_KEY = 'django-insecure-w1uno(p83_95-!3aekht%p%zw#pm*d@7-wkkuo4i)x18p2&_xx
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1',
-                 'rcc-bookmanagementsystem.onrender.com',]
+                 '.herokuapp.com',]
 
 
 # Application definition
@@ -91,12 +91,12 @@ WSGI_APPLICATION = 'BookManagementSystem.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd15p5hf6ractmh',  # データベース名
-        'USER': 'u3acfqt2p7c9o8',  # ユーザー名
-        'PASSWORD': 'p8cf6c6ad388f336a79b9619cecbfda10c56bca9e61b5e7a5de199a9050eb30da',  # パスワード
-        'HOST': 'cb4l59cdg4fg1k.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com',  # ホスト
-        'PORT': '5432',  # ポート
+        'ENGINE': 'django.db.backends.postgresql', #PostgreSQLならば
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'PORT': os.environ.get('DATABASE_PORT'),
     }
 }
 
