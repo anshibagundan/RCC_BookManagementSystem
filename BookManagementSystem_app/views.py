@@ -63,9 +63,11 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
+            print(user)
             login(request, user)
             return redirect('transaction_page')
         else:
+            print("none")
             messages.error(request, 'ユーザー名またはパスワードが間違っています。')
 
     return render(request, 'login.html')
